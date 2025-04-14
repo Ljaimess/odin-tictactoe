@@ -1,3 +1,20 @@
 * {
     background-color: darkslategrey;
 }
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+.block {
+    background-color: mediumorchid;
+    width: 30px;
+    height: 30px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: black;
+}
