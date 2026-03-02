@@ -110,7 +110,9 @@ const GameController = (() => {
     const getWinner = () => winner;
 
     const reset = () => {
-        init();
+        const stored1 = localStorage.getItem("player1Name") || "Player 1";
+        const stored2 = localStorage.getItem("player2Name") || "Player 2";
+        init(stored1, stored2);
     };
 
     return { 
@@ -164,6 +166,22 @@ const DisplayController = (() => {
         });
     };
 
+    const addStartButtonListener = () => {
+        const startButton = document.getElementById("start-button");
+        const input1 = document.getElementById("player1-name");
+        const input2 = document.getElementById("player2-name");
+        if (!startButton) return;
+        startButton.addEventListener("click", () => {
+            const name1 = (input1 && input1.value.trim()) || "Player 1";
+            const name2 = (input2 && input2.value.trim()) || "Player 2";
+            localStorage.setItem("player1Name", name1);
+            localStorage.setItem("player2Name", name2);
+            GameController.init(name1, name2);
+            render();
+            updateGameStatus();
+        });
+    };
+
     const updateGameStatus = () => {
         if (GameController.isGameOver()) {
             const winner = GameController.getWinner();
@@ -182,9 +200,16 @@ const DisplayController = (() => {
         cellElements = document.querySelectorAll(".block");
         statusElement = document.getElementById("player-turn");
         resetButton = document.getElementById("reset-button");
-        
+        const input1 = document.getElementById("player1-name");
+        const input2 = document.getElementById("player2-name");
+        const stored1 = localStorage.getItem("player1Name") || "Player 1";
+        const stored2 = localStorage.getItem("player2Name") || "Player 2";
+        if (input1) input1.value = stored1;
+        if (input2) input2.value = stored2;
+
         addCellClickListeners();
         addResetButtonListener();
+        addStartButtonListener();
         render();
         updateGameStatus();
     };
@@ -193,6 +218,8 @@ const DisplayController = (() => {
 })();
 
 document.addEventListener("DOMContentLoaded", () => {
-    GameController.init("Player 1", "Player 2");
+    const stored1 = localStorage.getItem("player1Name") || "Player 1";
+    const stored2 = localStorage.getItem("player2Name") || "Player 2";
+    GameController.init(stored1, stored2);
     DisplayController.init();
 });
